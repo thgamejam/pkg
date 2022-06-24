@@ -7,7 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/registry"
 	consulAPI "github.com/hashicorp/consul/api"
-	"pkg/conf"
+	"github.com/thgamejam/pkg/conf"
 )
 
 type Consul struct {

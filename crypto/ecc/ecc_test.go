@@ -2,7 +2,7 @@ package ecc
 
 import (
 	"github.com/stretchr/testify/assert"
-	"pkg/uuid"
+	"github.com/thgamejam/pkg/uuid"
 	"testing"
 )
 

@@ -1,8 +1,8 @@
 package email
 
 import (
+	"github.com/thgamejam/pkg/conf"
 	"gopkg.in/gomail.v2"
-	"pkg/conf"
 )
 
 type emailService struct {
@@ -11,11 +11,11 @@ type emailService struct {
 }
 
 func NewEmailService(c *conf.Email) (*emailService, error) {
-	d := gomail.NewDialer(c.Host, int(c.Port), c.User, c.Pass)
+	d := gomail.NewDialer(c.Host, int(c.Port), c.Username, c.Password)
 
 	return &emailService{
 		email: d,
-		user:  c.User,
+		user:  c.Username,
 	}, nil
 }
 

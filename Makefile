@@ -1,32 +1,36 @@
 GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
-PKG_ERROR_PROTO_FILES=$(shell find "./util/errors" -name "*.proto")
-PKG_CONF_PROTO_FILES=$(shell find "./conf" -name *.proto)
+CONF_PROTO_DIR="./proto/conf"
+ERROR_PROTO_DIR="./proto/errors"
+THIRD_PARTY_PROTO_DIR="./proto/third_party"
+CONF_PD_GO_DIR="./conf"
+CONF_PROTO_FILES=$(shell find $(CONF_PROTO_DIR) -name *.proto)
+ERROR_PROTO_FILES=$(shell find $(ERROR_PROTO_DIR) -name "*.proto")
 
 .PHONY: init
 # init env
 init:
+	git submodule init
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
-	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2@latest
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2@latest
+	go mod tidy
+
+.PHONY: config
+# generate internal proto
+config:
+	protoc --proto_path=$(CONF_PROTO_DIR) \
+			--proto_path=$(THIRD_PARTY_PROTO_DIR) \
+			--go_out=paths=source_relative:$(CONF_PD_GO_DIR) \
+			$(CONF_PROTO_FILES)
 
 .PHONY: error
 # generate errors code
 error:
 	protoc --proto_path=. \
-               --proto_path=./third_party \
-               --go_out=paths=source_relative:. \
-               --go-errors_out=paths=source_relative:. \
-               $(PKG_ERROR_PROTO_FILES)
-
-.PHONY: config
-# generate internal proto
-config:
-	protoc --proto_path=. \
-	       --proto_path=./third_party \
-	       --go_out=paths=source_relative:. \
-	       $(PKG_CONF_PROTO_FILES)
+			--proto_path=$(THIRD_PARTY_PROTO_DIR) \
+			--go-errors_out=paths=source_relative:. \
+			$(ERROR_PROTO_FILES)
 
 .PHONY: all
 # 生成所有代码

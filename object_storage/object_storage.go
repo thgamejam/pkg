@@ -10,7 +10,7 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 
-	"pkg/conf"
+	"github.com/thgamejam/pkg/conf"
 )
 
 type ObjectStorage struct {
@@ -18,16 +18,16 @@ type ObjectStorage struct {
 }
 
 // NewObjectStorage 初始化对象存储
-func NewObjectStorage(c *conf.Service) (*ObjectStorage, error) {
+func NewObjectStorage(c *conf.ObjectStorage) (*ObjectStorage, error) {
 	client, err := minio.New(
-		c.Data.ObjectStorage.Domain, // 使用的域名
+		c.Domain, // 使用的域名
 		&minio.Options{
 			Creds: credentials.NewStaticV4(
-				c.Data.ObjectStorage.AccessKeyId,
-				c.Data.ObjectStorage.SecretAccessKey,
-				c.Data.ObjectStorage.Token,
+				c.AccessKeyId,
+				c.SecretAccessKey,
+				c.Token,
 			),
-			Secure: c.Data.ObjectStorage.Secure,
+			Secure: c.Secure,
 		})
 	if err != nil {
 		return nil, err

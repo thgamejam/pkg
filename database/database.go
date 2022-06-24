@@ -1,15 +1,15 @@
 package database
 
 import (
+	"github.com/thgamejam/pkg/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"pkg/conf"
 )
 
 // NewDataBase 初始化数据库
-func NewDataBase(c *conf.Service) (*gorm.DB, error) {
+func NewDataBase(c *conf.Database) (*gorm.DB, error) {
 	db, err := gorm.Open(
-		mysql.Open(c.Data.Database.Source),
+		mysql.Open(c.Source),
 		&gorm.Config{
 			//Logger: , // TODO 绑定 Log 未完成
 		})
@@ -23,11 +23,11 @@ func NewDataBase(c *conf.Service) (*gorm.DB, error) {
 	}
 	// 设置连接池
 	// 空闲
-	selDb.SetMaxIdleConns(int(c.Data.Database.MaxIdleConn))
+	selDb.SetMaxIdleConns(int(c.MaxIdleConn))
 	// 打开
-	selDb.SetMaxOpenConns(int(c.Data.Database.MaxOpenConn))
+	selDb.SetMaxOpenConns(int(c.MaxOpenConn))
 	// 超时 time.Second * 30
-	selDb.SetConnMaxLifetime(c.Data.Database.ConnMaxLifetime.AsDuration())
+	selDb.SetConnMaxLifetime(c.ConnMaxLifetime.AsDuration())
 
 	err = registerCallbacks(db)
 	if err != nil {

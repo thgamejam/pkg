@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/go-redis/redis/v8"
-	"pkg/conf"
+	"github.com/thgamejam/pkg/conf"
 	"time"
 )
 
@@ -15,19 +15,19 @@ type Cache struct {
 }
 
 // NewCache 初始化缓存
-func NewCache(c *conf.Service) (*Cache, error) {
+func NewCache(c *conf.Redis) (*Cache, error) {
 	rdb := redis.NewClient(&redis.Options{
-		Network:      c.Data.Redis.Network,
-		Addr:         c.Data.Redis.Addr,
-		Password:     c.Data.Redis.Password, // no password set
-		ReadTimeout:  c.Data.Redis.ReadTimeout.AsDuration(),
-		WriteTimeout: c.Data.Redis.WriteTimeout.AsDuration(),
+		Network:      c.Network,
+		Addr:         c.Addr,
+		Password:     c.Password, // no password set
+		ReadTimeout:  c.ReadTimeout.AsDuration(),
+		WriteTimeout: c.WriteTimeout.AsDuration(),
 		DB:           0, // use default DB
 	})
 
 	return &Cache{
 		Client:          rdb,
-		DelayDeleteTime: c.Data.Redis.DelayDeleteTime.AsDuration(),
+		DelayDeleteTime: c.DelayDeleteTime.AsDuration(),
 	}, nil
 }
 

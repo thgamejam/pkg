@@ -11,10 +11,11 @@ ERROR_PROTO_FILES=$(shell find $(ERROR_PROTO_DIR) -name "*.proto")
 # init env
 init:
 	git submodule init
+	git submodule update
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2@latest
-	go mod tidy
+	go mod tidy -compat=1.17
 
 .PHONY: config
 # generate internal proto

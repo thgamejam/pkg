@@ -43,3 +43,5 @@ openapi.yaml
 *.pb.validate.go
 conf.pb.go
 *.swagger.json
+
+go.sum

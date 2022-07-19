@@ -15,7 +15,7 @@ init:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2@latest
-	go mod tidy -compat=1.17
+	go mod tidy
 
 .PHONY: config
 # generate internal proto
